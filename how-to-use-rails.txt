@@ -1,0 +1,78 @@
+Para las maquinas que no lo tengan 
+  $ gem install rails
+
+Para crear un nuevo archivo es 
+  $ rails new FileName
+
+Te ubicas en la  carpeta de tu archivo y enciendes el servidor con 
+  rails server
+   http://localhost:3000
+
+ Para generar un controlador que se llame Welcome con una vista index 
+   rails generate controller Welcome index  
+
+ Los archivos los puedes ver en 
+   app/controllers/welcome_controller.rb 
+   app/views/welcome/index.html.erb
+
+ Para establecer la home page 
+ Abres tu archivo config/routes.rb
+Aparece algo como esto
+ Rails.application.routes.draw do
+  le dices que haga las acciones en welcome controller y las muestre en index 
+  get 'welcome/index'
+  la raiz de la aplicacion se vuelve welcome
+  root 'welcome#index'
+end  
+
+Para crear resources
+Rails.application.routes.draw do
+ 
+  resources :articles #este es la clase que estas creando 
+ 
+  root 'welcome#index'
+end 
+Despues corres rails routes
+
+PARA GENERAR UN CONTROLADOR
+rails generate controller NameController
+Al terminar te marca un error por que esta esperando funciones puedes crearlas manualmente dentro del controlador con 
+def new 
+end
+como cualquier otro metodo 
+
+PARA DECLARAR FORMAS EN LA VISTA 
+CREA UN A FORMA LLAMADA ARTICLE Y LE DICE A DONDE TIENE QUE IR CON URL 
+<%= form_for :article url: articles_path do |f| %>
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </p>
+ 
+  <p>
+    <%= f.label :text %><br>
+    <%= f.text_area :text %>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+
+VUELVES A DAR RAILS ROUTES 
+
+PARA GENERAR UN MODELO Y MIGRACION 
+rails generate model Article title:string text:text
+Genera un modelo article con dos campos title y text que son tipo string
+Este comando tambien crea una migracion a la que puedes hacer ajustes en db migrate 
+corres rails db:migrate que crea la tabla 
+
+PARA GENERAR UN MODELO RELACIONADO  LE PONES REFERENCES Y A QUE MODELO LO REFERENCIAS
+rails generate model Comment commenter:string body:text article:references
+LUEGO SI TODO EN LA MIGRACION ES CORRECTO 
+rails db:migrate
+Aunque la nueva tabla, en este caso comments tiene la relacion article debes editar la relacion en el modelo
+Tambien es importante para articulos que estan relacionados crear la relacion de los resources 
+resources :articles do
+  resources :comments
+end
